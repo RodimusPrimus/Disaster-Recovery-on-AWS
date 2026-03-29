@@ -1,0 +1,35 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to manage EBS volumes and snapshots
+
+Resources:
+  EBSVolume:
+    Type: AWS::EC2::Volume
+    Properties:
+      AvailabilityZone: !Ref AvailabilityZone
+      Size: !Ref VolumeSize
+      VolumeType: gp2
+
+  EBSVolumeSnapshot:
+    Type: AWS::EC2::Snapshot
+    Properties:
+      VolumeId: !Ref EBSVolume
+
+Parameters:
+  AvailabilityZone:
+    Type: AWS::EC2::AvailabilityZone::Name
+    Description: The Availability Zone to create the EBS volume in.
+
+  VolumeSize:
+    Type: Number
+    Default: 8
+    Description: Size of the EBS volume in GiB.
+
+Outputs:
+  VolumeId:
+    Value: !Ref EBSVolume
+    Description: The ID of the created EBS volume.
+
+  SnapshotId:
+    Value: !Ref EBSVolumeSnapshot
+    Description: The ID of the created snapshot.
